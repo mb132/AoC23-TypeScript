@@ -17,24 +17,20 @@ function parseNumberFromString(input: string): string {
     ['nine', '9']
   ]);
   let out = input;
-
   replaceMap.forEach((replacement, word) => {
     if (input == word) {
       out = replacement;}
   });
-  
   return out;
 }
 
 
 const first = (input: string) => {
   let solution = 0;
-  let rowC = 1;
   let rows = splitLines(input);
   rows.forEach(element => {
     let numbers = [...element.replace(/[^0-9]/g, '')];
     solution += combineFirstLastNumber(numbers);
-    console.log(rowC++, numbers, combineFirstLastNumber(numbers) + " -> ", solution);
   });
 
   return "Solution1: " + solution;
@@ -42,19 +38,17 @@ const first = (input: string) => {
 
 const expectedFirstSolution = 'solution 1';
 
-function findAllDigits(inputString: string) {
+function groupAllNumbers(inputString: string):string[] {
   const results: string[] = [];
   const regex =
     /1|2|3|4|5|6|7|8|9|one|two|three|four|five|six|seven|eight|nine/g;
-  let start = 0;
-
-  while (start < inputString.length) {
-    regex.lastIndex = start;
+  let index = 0;
+  while (index < inputString.length) {
+    regex.lastIndex = index;
     const match = regex.exec(inputString);
-
     if (match) {
-      results.push(match[0]);
-      start = match.index + 1; 
+      results.push(parseNumberFromString(match[0]));
+      index = match.index + 1; 
     } else {
       break; 
     }
@@ -66,8 +60,7 @@ const second = (input: string) => {
   let solution = 0;
   let rows = splitLines(input);
   rows.forEach(row => {
-    let rowArray = findAllDigits(row);
-    rowArray = rowArray.map((str) => parseNumberFromString(str))
+    let rowArray = groupAllNumbers(row);
     solution += combineFirstLastNumber(rowArray);
   });
   return 'Solution 2: ' + solution;
